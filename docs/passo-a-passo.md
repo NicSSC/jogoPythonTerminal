@@ -194,7 +194,7 @@ Duas melhorias visuais:
 
 ---
 
-### Etapa 5: Atirar (lágrimas)
+### Etapa 5: Atacar à distância
 
 Um tiro é só mais um "objeto" com estado: posição, direção e alcance.
 
@@ -205,6 +205,9 @@ sala["tiros"].append(tiro)
 
 A cada quadro, todo tiro anda 1 casa (`tiro["x"] += tiro["dx"]`) e some se bater em algo
 ou se o alcance acabar. As setas do teclado chegam como dois códigos (`224` e depois `72`, `80`, `75` ou `77`).
+
+Cada personagem tem o seu ataque: o Cavaleiro joga machadinhas (`x`), a Maga lança bolas de fogo (`o`)
+e o Ladino atira adagas, que apontam para onde estão indo (`-` ou `|`).
 
 Para não metralhar, existe uma **recarga**: depois de atirar, o jogador espera alguns quadros.
 
@@ -311,7 +314,7 @@ que gasta **energia**, e a energia carrega matando inimigos:
 
 ### Etapa 12: O chefe final e os menus
 
-O **Devorador** é um inimigo com muita vida que:
+O **Rei Sombrio** é um inimigo com muita vida que:
 - atira em 4 direções (alternando `+` e `x`)
 - chama moscas para ajudar
 - fica mais rápido com menos da metade da vida
@@ -338,7 +341,7 @@ Coisas que só aparecem jogando:
 
 ## Ideias para continuar o projeto
 
-- Mapa com várias salas conectadas (cima, baixo, esquerda, direita), como no Isaac de verdade
+- Mapa com várias salas conectadas em cada andar (cima, baixo, esquerda, direita)
 - Salvar o recorde (menor tempo) num arquivo `.txt`
 - Itens passivos que mudam o tiro (tiro triplo, tiro que atravessa)
 - Uma loja entre as salas

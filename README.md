@@ -1,14 +1,14 @@
 # Jogo Python Terminal
 
-Um jogo estilo *roguelike* feito inteiro no terminal com Python, inspirado em **The Binding of Isaac**.
-Você escolhe um personagem, desce por **10 salas** cheias de inimigos, abre baús, usa poderes
-e enfrenta o chefe final, **O Devorador**.
+Um jogo estilo *roguelike* feito inteiro no terminal com Python.
+Você escolhe um herói e sobe os **10 andares da Torre Amaldiçoada**, cheios de inimigos,
+abrindo baús, usando poderes, até enfrentar o chefe que governa lá do topo: **o Rei Sombrio**.
 
 O projeto nasceu do tutorial *"Jogos Digitais ASCII"* da disciplina de Linguagens de Programação:
 a ideia de **estado + entrada + atualização + desenho** dentro de um `while True`, só que bem expandida.
 
 ```
-  Sala 6/10 - Lago Congelado   Ladino ☻
+  Andar 6/10 - Salão de Gelo   Ladino ☻
   Vida ♥♥♥♥♥   Energia ■■····  [E] Manto de Sombra (3)
   Dano 1   Alcance 8   Inimigos: 4
   ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
@@ -18,7 +18,7 @@ a ideia de **estado + entrada + atualização + desenho** dentro de um `while Tr
   ▓...................≈≈..................▓
   ▓.♦.................≈≈.Θ................▓
   ▓.......................................▓
-  ▓.☻..•..................................█
+  ▓.☻..-..................................█
   ▓.......................................▓
   ▓...................≈≈..................▓
   ▓...................≈≈...............♦..▓
@@ -43,24 +43,24 @@ python jogo.py
 | Tecla | Ação |
 |---|---|
 | `W` `A` `S` `D` | andar |
-| Setas ou `I` `J` `K` `L` | atirar lágrimas |
+| Setas ou `I` `J` `K` `L` | atacar |
 | `E` | usar o poder especial (gasta energia) |
 | `P` | pausar |
 | `Q` | sair |
 
 ## O que tem no jogo
 
-- **3 personagens**, cada um com vida, dano, alcance, velocidade e poder próprios
-  - ♂ **Cavaleiro**: *Giro de Espada* (dano em área em volta dele)
-  - ♀ **Maga**: *Tempestade Arcana* (acerta todos os inimigos da sala)
-  - ☻ **Ladino**: *Manto de Sombra* (fica invencível e causa dano dobrado por 4s)
-- **Sistema de batalha em tempo real**: lágrimas do jogador, tiros dos inimigos, dano por contato
+- **3 personagens**, cada um com vida, dano, alcance, velocidade, ataque e poder próprios
+  - ♂ **Cavaleiro**: arremessa machadinhas `x` · poder *Giro de Espada* (dano em área em volta dele)
+  - ♀ **Maga**: lança bolas de fogo `o` · poder *Tempestade Arcana* (acerta todos os inimigos do andar)
+  - ☻ **Ladino**: atira adagas `-` `|` · poder *Manto de Sombra* (fica invencível e causa dano dobrado por 4s)
+- **Sistema de batalha em tempo real**: ataques do jogador, tiros dos inimigos, dano por contato
 - **Sistema de vida** em corações, com invencibilidade rápida depois de levar dano
 - **Sistema de energia** para os poderes (carrega matando inimigos)
 - **7 inimigos** com comportamentos diferentes + **1 chefe final**
-- **10 salas** em sequência, cada uma com tema, cores e formato diferentes
+- **10 andares** em sequência, cada um com tema, cores e formato diferentes
 - **Obstáculos aleatórios** que nunca nascem onde o jogador está
-- **Baús** que aparecem quando a sala é limpa, sempre num lugar onde o jogador não está
+- **Baús** que aparecem quando o andar é limpo, sempre num lugar onde o jogador não está
 - **Chão perigoso** (água tóxica, lava) e **corações** que caem dos inimigos
 
 ## Estrutura do projeto
@@ -78,4 +78,4 @@ jogoPythonTerminal/
 ## Documentação
 
 - [Explicação do código](docs/explicacao-do-codigo.md): o que cada arquivo e cada função faz
-- [Passo a passo](docs/passo-a-passo.md): como o jogo foi construído, do `@` andando até o chefe final
+- [Passo a passo](docs/passo-a-passo.md): como o jogo foi construído, do `☺` andando até o chefe final

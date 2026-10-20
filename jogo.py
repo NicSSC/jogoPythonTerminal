@@ -203,6 +203,7 @@ def criar_jogador(personagem):
         "poder": personagem["poder"],
         "nome_poder": personagem["nome_poder"],
         "custo_poder": personagem["custo_poder"],
+        "tiro": personagem["tiro"],
         "energia": 2,
         "x": INICIO_X,
         "y": MEIO,
@@ -291,7 +292,7 @@ def criar_sala(numero, jogador):
         x, y = random.choice(livres)
         sala["inimigos"].append(criar_inimigo(tipo, x, y))
 
-    mostrar_mensagem(sala, "Derrote todos os inimigos para abrir a porta!")
+    mostrar_mensagem(sala, "Derrote todos os inimigos para abrir a escada!")
     return sala
 
 
@@ -362,7 +363,7 @@ def matar_inimigo(jogador, sala, inimigo):
         for ajudante in list(sala["inimigos"]):
             adicionar_efeito(sala, ajudante["x"], ajudante["y"], "*", "93", 6)
             sala["inimigos"].remove(ajudante)
-        mostrar_mensagem(sala, "O DEVORADOR FOI DERROTADO!", 4)
+        mostrar_mensagem(sala, "O REI SOMBRIO FOI DERROTADO!", 4)
     elif random.random() < 0.15:
         # as vezes o inimigo deixa cair um coracao
         sala["itens"].append({"x": inimigo["x"], "y": inimigo["y"], "tipo": "coracao"})
@@ -379,7 +380,7 @@ def mover_jogador(jogador, sala, dx, dy):
     if celula == "P":
         if sala["porta_aberta"]:
             return "porta"
-        mostrar_mensagem(sala, "A porta está trancada! Derrote todos os inimigos.", 2)
+        mostrar_mensagem(sala, "A escada está trancada! Derrote todos os inimigos.", 2)
         return None
     if celula == "#" or celula == "O":
         return None
@@ -504,7 +505,7 @@ def atualizar_jogador(jogador, sala):
 
 
 # ============================================================
-# TIROS (LAGRIMAS)
+# TIROS (ATAQUES DO JOGADOR E DOS INIMIGOS)
 # ============================================================
 def atualizar_tiros(jogador, sala):
     restantes = []
@@ -532,7 +533,7 @@ def atualizar_tiros(jogador, sala):
 
 
 def checar_acertos(jogador, sala):
-    """Ve se alguma lagrima encostou em alguem."""
+    """Ve se algum tiro encostou em alguem."""
     restantes = []
     for tiro in sala["tiros"]:
         acertou = False
@@ -673,7 +674,7 @@ def atualizar_inimigos(jogador, sala):
 
 
 # ============================================================
-# SALA LIMPA: ABRE A PORTA E APARECE O BAU
+# ANDAR LIMPO: ABRE A PORTA E APARECE O BAU
 # ============================================================
 def checar_sala_limpa(jogador, sala):
     if len(sala["inimigos"]) > 0 or sala["porta_aberta"]:
@@ -689,9 +690,9 @@ def checar_sala_limpa(jogador, sala):
         x, y = random.choice(livres)
         sala["itens"].append({"x": x, "y": y, "tipo": "bau"})
         adicionar_efeito(sala, x, y - 1, "+", "93", 10)
-        mostrar_mensagem(sala, "Sala limpa! Um baú ■ apareceu e a porta abriu →", 4)
+        mostrar_mensagem(sala, "Andar limpo! Um baú ■ apareceu e a escada abriu →", 4)
     else:
-        mostrar_mensagem(sala, "Sala limpa! A porta abriu →", 4)
+        mostrar_mensagem(sala, "Andar limpo! A escada abriu →", 4)
 
 
 def atualizar_efeitos(sala):

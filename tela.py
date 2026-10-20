@@ -114,7 +114,14 @@ def desenhar_mapa(jogador, sala):
             elif pos in pos_tiros:
                 tiro = pos_tiros[pos]
                 if tiro["do_jogador"]:
-                    texto += cor("•", jogador["cor"])
+                    simbolo = jogador["tiro"]
+                    if simbolo == "direcional":
+                        # a adaga aponta para onde esta indo
+                        if tiro["dy"] == 0:
+                            simbolo = "-"
+                        else:
+                            simbolo = "|"
+                    texto += cor(simbolo, jogador["cor"])
                 else:
                     texto += cor("•", "91")
             elif pos in pos_itens:
@@ -158,7 +165,7 @@ def barra_do_chefe(sala):
             tamanho = 30
             cheio = int(tamanho * inimigo["vida"] / inimigo["vida_max"])
             barra = cor("█" * cheio, "91") + cor("░" * (tamanho - cheio), "90")
-            return cor("  O DEVORADOR ", "91;1") + barra
+            return cor("  O REI SOMBRIO ", "91;1") + barra
     return None
 
 
@@ -166,7 +173,7 @@ def desenhar_jogo(jogador, sala):
     dados = sala["dados"]
     linhas = []
 
-    titulo = "  Sala " + str(sala["numero"] + 1) + "/" + str(len(SALAS)) + " - " + dados["nome"]
+    titulo = "  Andar " + str(sala["numero"] + 1) + "/" + str(len(SALAS)) + " - " + dados["nome"]
     linhas.append(cor(titulo, "97;1") + "   " + cor(jogador["nome"] + " " + jogador["simbolo"], jogador["cor"]))
 
     poder = "[E] " + jogador["nome_poder"] + " (" + str(jogador["custo_poder"]) + ")"
@@ -183,7 +190,7 @@ def desenhar_jogo(jogador, sala):
         info = "  Dano " + str(jogador["dano"]) + "   Alcance " + str(jogador["alcance"])
         info += "   Inimigos: " + str(len(sala["inimigos"]))
         if sala["porta_aberta"]:
-            info += cor("   Porta aberta! →", "92")
+            info += cor("   Escada aberta! →", "92")
         linhas.append(cor(info, "37"))
 
     linhas.extend(desenhar_mapa(jogador, sala))
@@ -213,21 +220,21 @@ def tela_titulo():
     print(cor("    ╚══════════════════════════════════════════╝", "91"))
     print()
     print("        " + cor("█████████████████████", "90"))
-    print("        " + cor("█", "90") + "  " + cor("¤", "93") + "      " + cor("•", "94") + "  " + cor("ж", "97") + "       " + cor("█", "90"))
-    print("        " + cor("█", "90") + "    " + cor("♂", "94") + cor("•", "94") + "     " + cor("■", "93") + "     " + cor("░", "92"))
+    print("        " + cor("█", "90") + "  " + cor("¤", "93") + "      " + cor("x", "94") + "  " + cor("ж", "97") + "       " + cor("█", "90"))
+    print("        " + cor("█", "90") + "    " + cor("♂", "94") + cor("x", "94") + "     " + cor("■", "93") + "     " + cor("░", "92"))
     print("        " + cor("█", "90") + "  " + cor("○", "97") + "      " + cor("Z", "32") + "       " + cor("█", "90"))
     print("        " + cor("█████████████████████", "90"))
     print()
-    print("    Desça pelas 10 salas do porão e derrote")
-    print("    " + cor("O Devorador", "91") + " que vive lá no fundo.")
+    print("    Suba os 10 andares da Torre Amaldiçoada e derrote")
+    print("    " + cor("O Rei Sombrio", "91") + " que governa lá do topo.")
     print()
     print(cor("    COMO JOGAR", "97;1"))
     print("    " + cor("W A S D", "96") + "       andar")
-    print("    " + cor("Setas / IJKL", "96") + "  atirar lágrimas")
+    print("    " + cor("Setas / IJKL", "96") + "  atacar")
     print("    " + cor("E", "96") + "             usar poder (gasta energia)")
-    print("    " + cor("■", "93") + "             baú: aparece quando a sala é limpa")
+    print("    " + cor("■", "93") + "             baú: aparece quando o andar é limpo")
     print("    " + cor("♥", "91") + "             coração: recupera vida")
-    print("    Mate todos os inimigos para abrir a porta " + cor("░", "92"))
+    print("    Mate todos os inimigos para abrir a escada " + cor("░", "92"))
     print()
     print(cor("    Aperte ENTER para começar  (Q para sair)", "93"))
 
@@ -245,6 +252,7 @@ def tela_escolha_personagem():
               "   Dano " + cor("■" * p["dano"], "97") +
               "   Alcance " + cor("■" * (p["alcance"] // 2), "97") +
               "   Velocidade " + cor("■" * (10 - p["recarga"]), "97"))
+        print("        Ataque: " + p["nome_tiro"])
         print("        Poder: " + cor(p["nome_poder"], "96") + " - " + p["descricao_poder"])
         print()
     print(cor("    Aperte 1, 2 ou 3", "93"))
@@ -255,9 +263,9 @@ def tela_transicao(numero):
     limpar()
     print("\n" * 6)
     if numero == len(SALAS) - 1:
-        print(cor("              !!! SALA DO CHEFE !!!", "91;1"))
+        print(cor("              !!! TOPO DA TORRE !!!", "91;1"))
     else:
-        print(cor("                 Sala " + str(numero + 1) + " de " + str(len(SALAS)), "90"))
+        print(cor("                 Andar " + str(numero + 1) + " de " + str(len(SALAS)), "90"))
     print()
     print(cor("              ~ " + sala["nome"] + " ~", "97;1"))
     print()
@@ -277,15 +285,15 @@ def tela_fim(jogador, venceu, numero_sala, tempo):
     if venceu:
         print(cor("        ♦  VOCÊ VENCEU!  ♦", "93;1"))
         print()
-        print("    O Devorador foi derrotado e o porão está livre.")
+        print("    O Rei Sombrio caiu e a torre está livre da maldição.")
     else:
         print(cor("        †  FIM DE JOGO  †", "91;1"))
         print()
-        print("    Você caiu na sala " + str(numero_sala + 1) + " - " + SALAS[numero_sala]["nome"] + ".")
+        print("    Você caiu no andar " + str(numero_sala + 1) + " - " + SALAS[numero_sala]["nome"] + ".")
     print()
     print(cor("    ESTATÍSTICAS", "97;1"))
     print("    Personagem ........ " + cor(jogador["nome"] + " " + jogador["simbolo"], jogador["cor"]))
-    print("    Inimigos mortos ... " + str(jogador["abates"]))
+    print("    Inimigos derrotados " + str(jogador["abates"]))
     print("    Baús abertos ...... " + str(jogador["baus"]))
     print("    Tempo ............. " + str(int(tempo // 60)) + "min " + str(int(tempo % 60)) + "s")
     print()

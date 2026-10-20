@@ -29,8 +29,9 @@ CIANO_ESCURO = "36"
 # ------------------------------------------------------------
 # PERSONAGENS JOGAVEIS
 # vida      -> quantos coracoes comeca
-# dano      -> dano de cada lagrima
-# alcance   -> quantas casas a lagrima anda
+# dano      -> dano de cada ataque
+# alcance   -> quantas casas o ataque anda
+# tiro      -> simbolo do ataque ("direcional" = muda conforme a direcao)
 # recarga   -> quadros de espera entre um tiro e outro (menor = mais rapido)
 # poder     -> poder especial (tecla E), gasta energia
 # ------------------------------------------------------------
@@ -43,6 +44,8 @@ PERSONAGENS = [
         "dano": 2,
         "alcance": 5,
         "recarga": 8,
+        "tiro": "x",
+        "nome_tiro": "machadinhas",
         "poder": "giro",
         "nome_poder": "Giro de Espada",
         "custo_poder": 3,
@@ -57,6 +60,8 @@ PERSONAGENS = [
         "dano": 1,
         "alcance": 11,
         "recarga": 6,
+        "tiro": "o",
+        "nome_tiro": "bolas de fogo",
         "poder": "tempestade",
         "nome_poder": "Tempestade Arcana",
         "custo_poder": 4,
@@ -71,6 +76,8 @@ PERSONAGENS = [
         "dano": 1,
         "alcance": 8,
         "recarga": 4,
+        "tiro": "direcional",
+        "nome_tiro": "adagas",
         "poder": "sombra",
         "nome_poder": "Manto de Sombra",
         "custo_poder": 3,
@@ -99,12 +106,12 @@ INIMIGOS = {
     "fantasma": {"nome": "Fantasma", "simbolo": "&", "cor": CIANO,   "vida": 3,  "dano": 1, "espera": 7,  "ia": "fantasma"},
     "olho":     {"nome": "Olho",     "simbolo": "Θ", "cor": ROXO,    "vida": 3,  "dano": 1, "espera": 14, "ia": "atirador", "espera_tiro": 30},
     "golem":    {"nome": "Golem",    "simbolo": "G", "cor": MARROM,  "vida": 8,  "dano": 2, "espera": 10, "ia": "perseguir"},
-    "chefe":    {"nome": "O Devorador", "simbolo": "Ω", "cor": VERMELHO, "vida": 60, "dano": 2, "espera": 6, "ia": "chefe", "espera_tiro": 28},
+    "chefe":    {"nome": "O Rei Sombrio", "simbolo": "Ω", "cor": VERMELHO, "vida": 60, "dano": 2, "espera": 6, "ia": "chefe", "espera_tiro": 28},
 }
 
 
 # ------------------------------------------------------------
-# SALAS (sao 10, uma depois da outra)
+# SALAS / ANDARES DA TORRE (sao 10, um em cima do outro)
 # parede / chao / obstaculo / perigo -> (caractere, cor)
 # perigo   -> chao que machuca quando voce pisa (None = sala sem perigo)
 # layout   -> formato fixo da sala: livre, pilares, cantos, rio, lagoas, corredor
@@ -112,55 +119,55 @@ INIMIGOS = {
 # ------------------------------------------------------------
 SALAS = [
     {
-        "nome": "Porão Úmido",
-        "descricao": "Cheira a mofo... algo zumbe no escuro.",
+        "nome": "Masmorra da Torre",
+        "descricao": "A subida começa aqui embaixo... algo zumbe no escuro.",
         "parede": ("█", CINZA), "chao": (" ", CINZA),
         "obstaculo": ("○", BRANCO), "perigo": None,
         "layout": "livre", "obstaculos": 6,
         "inimigos": ["mosca", "mosca", "mosca"],
     },
     {
-        "nome": "Esgoto",
-        "descricao": "Cuidado com a água tóxica!",
+        "nome": "Cisterna Podre",
+        "descricao": "A água daqui envenena. Cuidado onde pisa!",
         "parede": ("▓", VERDE_ESCURO), "chao": (".", CINZA),
         "obstaculo": ("▒", VERDE_ESCURO), "perigo": ("≈", VERDE),
         "layout": "lagoas", "obstaculos": 5,
         "inimigos": ["mosca", "mosca", "aranha", "aranha"],
     },
     {
-        "nome": "Caverna dos Ecos",
-        "descricao": "Patinhas correm pelas pedras...",
+        "nome": "Depósito Abandonado",
+        "descricao": "Caixas quebradas e patinhas correndo...",
         "parede": ("█", MARROM), "chao": (",", CINZA),
         "obstaculo": ("▲", MARROM), "perigo": None,
         "layout": "cantos", "obstaculos": 8,
         "inimigos": ["aranha", "aranha", "aranha", "zumbi"],
     },
     {
-        "nome": "Floresta Sombria",
-        "descricao": "As árvores parecem te observar.",
+        "nome": "Jardim Suspenso",
+        "descricao": "As plantas da torre cresceram demais.",
         "parede": ("♣", VERDE_ESCURO), "chao": ("'", VERDE_ESCURO),
         "obstaculo": ("♠", VERDE), "perigo": None,
         "layout": "livre", "obstaculos": 14,
         "inimigos": ["zumbi", "zumbi", "mosca", "mosca", "mosca"],
     },
     {
-        "nome": "Cripta Antiga",
-        "descricao": "Os mortos não descansam aqui.",
+        "nome": "Galeria dos Cavaleiros",
+        "descricao": "As antigas guardas da torre ainda vagam por aqui.",
         "parede": ("█", ROXO), "chao": (" ", CINZA),
         "obstaculo": ("†", BRANCO), "perigo": None,
         "layout": "pilares", "obstaculos": 4,
         "inimigos": ["fantasma", "fantasma", "fantasma", "zumbi"],
     },
     {
-        "nome": "Lago Congelado",
-        "descricao": "A água gelada queima a pele.",
+        "nome": "Salão de Gelo",
+        "descricao": "Um feitiço congelou este andar inteiro.",
         "parede": ("▓", CIANO_ESCURO), "chao": (".", AZUL_ESCURO),
         "obstaculo": ("♦", CIANO), "perigo": ("≈", AZUL),
         "layout": "rio", "obstaculos": 5,
         "inimigos": ["olho", "olho", "aranha", "aranha"],
     },
     {
-        "nome": "Biblioteca Esquecida",
+        "nome": "Biblioteca do Mago",
         "descricao": "Olhos brilham entre as estantes.",
         "parede": ("█", MARROM), "chao": (" ", CINZA),
         "obstaculo": ("≡", AMARELO), "perigo": None,
@@ -168,7 +175,7 @@ SALAS = [
         "inimigos": ["olho", "olho", "fantasma", "fantasma", "mosca"],
     },
     {
-        "nome": "Forja de Lava",
+        "nome": "Forja Encantada",
         "descricao": "O calor é insuportável. Não pise na lava!",
         "parede": ("▓", VERMELHO_ESCURO), "chao": (".", VERMELHO_ESCURO),
         "obstaculo": ("█", CINZA), "perigo": ("~", VERMELHO),
@@ -176,16 +183,16 @@ SALAS = [
         "inimigos": ["golem", "golem", "mosca", "mosca", "olho"],
     },
     {
-        "nome": "Catedral Profana",
-        "descricao": "Um silêncio pesado... antes da tempestade.",
+        "nome": "Ante-sala do Trono",
+        "descricao": "Um silêncio pesado... o topo está perto.",
         "parede": ("█", BRANCO), "chao": ("·", CINZA),
         "obstaculo": ("‡", BRANCO), "perigo": None,
         "layout": "pilares", "obstaculos": 3,
         "inimigos": ["golem", "olho", "olho", "fantasma", "fantasma", "zumbi"],
     },
     {
-        "nome": "Covil do Devorador",
-        "descricao": "Ele está com fome. MUITA fome.",
+        "nome": "Topo da Torre",
+        "descricao": "O Rei Sombrio te esperava.",
         "parede": ("█", VERMELHO), "chao": (" ", CINZA),
         "obstaculo": ("○", CINZA), "perigo": ("~", VERMELHO),
         "layout": "cantos", "obstaculos": 3,

@@ -17,7 +17,7 @@ listas, dicionários e funções) consiga entender como o jogo funciona.
    - [Funções de ajuda](#54-funções-de-ajuda)
    - [Batalha: dano](#55-batalha-dano)
    - [Jogador: andar, atirar, poder, itens](#56-jogador-andar-atirar-poder-itens)
-   - [Tiros (lágrimas)](#57-tiros-lágrimas)
+   - [Tiros](#57-tiros)
    - [Inteligência dos inimigos](#58-inteligência-dos-inimigos)
    - [Sala limpa e baú](#59-sala-limpa-e-baú)
    - [O game loop](#510-o-game-loop)
@@ -110,8 +110,9 @@ PERSONAGENS = [
 É uma **lista de dicionários**. Cada dicionário é um personagem. Os campos importantes:
 
 - `vida`: quantos corações começa
-- `dano`: dano de cada lágrima
-- `alcance`: quantas casas a lágrima anda antes de sumir
+- `dano`: dano de cada ataque
+- `alcance`: quantas casas o ataque anda antes de sumir
+- `tiro`: o símbolo do ataque (`"x"` machadinha, `"o"` bola de fogo, `"direcional"` adaga)
 - `recarga`: quantos quadros espera entre um tiro e outro (**menor = atira mais rápido**)
 - `poder` / `custo_poder`: qual poder usa e quanta energia gasta
 
@@ -137,7 +138,7 @@ Assim dá para fazer `INIMIGOS["zumbi"]["vida"]`.
 ```python
 SALAS = [
     {
-        "nome": "Porão Úmido",
+        "nome": "Masmorra da Torre",
         "parede": ("█", CINZA),
         "chao": (" ", CINZA),
         "obstaculo": ("○", BRANCO),
@@ -150,7 +151,7 @@ SALAS = [
 ]
 ```
 
-São 10 salas. O que deixa cada uma **diferente**:
+São 10 salas, uma para cada andar da torre. O que deixa cada uma **diferente**:
 
 - `parede`, `chao`, `obstaculo`, `perigo`: **tuplas** `(caractere, cor)`, ou seja, o visual
 - `perigo`: chão que machuca (água tóxica, lava). `None` = a sala não tem
@@ -212,7 +213,7 @@ Essa função traduz o código para o caractere colorido **daquela sala**:
 
 ```python
 if celula == "#":
-    simbolo, c = dados["parede"]   # na Floresta vira ♣ verde, no Porão vira █ cinza
+    simbolo, c = dados["parede"]   # no Jardim vira ♣ verde, na Masmorra vira █ cinza
     return cor(simbolo, c)
 ```
 
@@ -243,6 +244,9 @@ Detalhes visuais:
 - o jogador **pisca** quando está invencível (só aparece em metade dos quadros: `quadro % 4 < 2`)
 - no poder Sombra, o jogador fica **cinza**
 - o inimigo fica com **fundo vermelho** por 3 quadros quando leva dano (`piscando`)
+- o ataque do jogador usa o símbolo do personagem (`jogador["tiro"]`): `x` para as machadinhas,
+  `o` para as bolas de fogo. A adaga do Ladino é `"direcional"`: vira `-` quando anda na horizontal
+  (`dy == 0`) e `|` na vertical. Os tiros dos inimigos são sempre `•` vermelho
 
 ### `barra_de_vida`, `barra_de_energia`, `barra_do_chefe`
 
@@ -536,7 +540,7 @@ você está percorrendo dá problema.
 Diminui todos os contadores em 1 a cada quadro (recarga, passo, invencibilidade, sombra...)
 e, se o jogador estiver em cima de chão perigoso (`"~"`), aplica dano.
 
-### 5.7 Tiros (lágrimas)
+### 5.7 Tiros
 
 #### `atualizar_tiros(jogador, sala)`
 
@@ -663,7 +667,7 @@ rápido demais para controlar. Então a tecla fica guardada em `passo_pendente` 
 `espera_passo` zera.
 
 **c) Tiro contínuo.** No terminal do Windows, se você segura duas teclas, **só a última repete**.
-Então seria impossível andar e atirar ao mesmo tempo, como no Isaac. A solução:
+Então seria impossível andar e atirar ao mesmo tempo. A solução:
 quando você aperta uma seta, o personagem continua atirando sozinho por 15 quadros
 (`tiro_tempo = 15`). Assim dá para apertar a seta e logo depois andar.
 
